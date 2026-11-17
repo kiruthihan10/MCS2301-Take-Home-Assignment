@@ -1,0 +1,5 @@
+# Ignore the test results file
+results.txt
+
+# Ignore .pyc files
+*.pyc
