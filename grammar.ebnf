@@ -1,0 +1,143 @@
+(* MiniLang - variant d1 = 3, d2 = 8 *)
+(* d1 is odd, so ^ is left-associative. *)
+program
+    = lines_of_exprs;
+
+lines_of_exprs
+    = lines_of_exprs, expr
+    | expr;
+
+expr
+    = let_expr
+    | fun_expr
+    | if_expr
+    | or_expr;
+
+let_expr
+    = "let", identifier, "=", expr, "in", expr;
+
+fun_expr
+    = "let", "fun", identifier, "(", identifier, ")", "=", expr, "in", expr;
+
+if_expr
+    = "if", expr, "then", expr, "else", expr;
+
+or_expr
+    = xor_expr, { "or", xor_expr };
+
+xor_expr
+    = and_expr, { "xor", and_expr };
+
+and_expr
+    = not_expr, { "and", not_expr };
+
+not_expr
+    = "not", not_expr
+    | comparison_expr;
+
+comparison_expr
+    = additive_expr, [ ( "<"
+    | "=="
+    | "<="
+    | "!=" ), additive_expr ];
+
+additive_expr
+    = multiplicative_expr, { ( "+"
+    | "-" ), multiplicative_expr };
+
+multiplicative_expr
+    = power_expr, { ( "*"
+    | "/" ), power_expr };
+
+power_expr
+    = factor, { "^", factor };
+
+factor
+    = integer
+    | boolean
+    | identifier, [ "(", expr, ")" ]
+    | "(", expr, ")";
+
+integer
+    = digit, { digit };
+
+boolean
+    = "true"
+    | "false";
+
+identifier
+    = letter, { letter
+    | digit
+    | "_" };
+
+lower_case_letter
+    = "a"
+    | "b"
+    | "c"
+    | "d"
+    | "e"
+    | "f"
+    | "g"
+    | "h"
+    | "i"
+    | "j"
+    | "k"
+    | "l"
+    | "m"
+    | "n"
+    | "o"
+    | "p"
+    | "q"
+    | "r"
+    | "s"
+    | "t"
+    | "u"
+    | "v"
+    | "w"
+    | "x"
+    | "y"
+    | "z";
+
+upper_case_letter
+    = "A"
+    | "B"
+    | "C"
+    | "D"
+    | "E"
+    | "F"
+    | "G"
+    | "H"
+    | "I"
+    | "J"
+    | "K"
+    | "L"
+    | "M"
+    | "N"
+    | "O"
+    | "P"
+    | "Q"
+    | "R"
+    | "S"
+    | "T"
+    | "U"
+    | "V"
+    | "W"
+    | "X"
+    | "Y"
+    | "Z";
+
+letter
+    = lower_case_letter
+    | upper_case_letter;
+
+digit
+    = "0"
+    | "1"
+    | "2"
+    | "3"
+    | "4"
+    | "5"
+    | "6"
+    | "7"
+    | "8"
+    | "9";
